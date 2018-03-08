@@ -9,7 +9,24 @@
   height: 10vmin;
 }
 
-.piece{
+.player1pieces .piece{
   position:absolute;
-  margin: 4.3vmin;
+  /*margin: 4vmin;*/
+  border:1vmin solid red;
+  /*background-color: yellow;*/
+  border-radius: 7vmin;
+  padding: 3vmin;
+  margin-top: 1vmin;
+  margin-left: 1vmin;
+}
+
+.player2pieces .piece{
+  position:absolute;
+  /*margin: 4vmin;*/
+  border:1vmin solid black;
+  /*background-color: yellow;*/
+  border-radius: 7vmin;
+  padding: 3vmin;
+  margin-top: 1vmin;
+  margin-left: 1vmin;
 }

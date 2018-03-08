@@ -30,12 +30,12 @@ window.onload = function(){
         document.querySelector('.tiles').insertAdjacentHTML('beforeend',newTile);
 
         if(this.board[row][col] !== 0){
-          let piece = '<div class="piece" style=top:%top%;left:%left%;>%piece%</div>';
+          let piece = '<div class="piece" style=top:%top%;left:%left%;></div>';
           newPiece = piece.replace('%top%',this.viewPorts[row]);
           newPiece = newPiece.replace('%left%',this.viewPorts[col]);
-          newPiece = newPiece.replace('%piece%',this.board[row][col]);
+          // newPiece = newPiece.replace('%piece%',this.board[row][col]);
 
-          document.querySelector('.pieces').insertAdjacentHTML('beforeend',newPiece);
+          document.querySelector('.player' + this.board[row][col] + 'pieces').insertAdjacentHTML('beforeend',newPiece);
 
         }
       }
