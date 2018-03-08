@@ -1,0 +1,15 @@
+.pieces{
+  margin: 40px;
+}
+.tile{
+  border: 1px solid black;
+  /*margin: 30px;*/
+  position: absolute;
+  width: 10vmin;
+  height: 10vmin;
+}
+
+.piece{
+  position:absolute;
+  margin: 4.3vmin;
+}
