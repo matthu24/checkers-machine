@@ -65,14 +65,19 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__piece__ = __webpack_require__(1);
+
 
 window.onload = function () {
 
   let board = [[0, 1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1, 0], [0, 1, 0, 1, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [2, 0, 2, 0, 2, 0, 2, 0], [0, 2, 0, 2, 0, 2, 0, 2], [2, 0, 2, 0, 2, 0, 2, 0]];
 
-  let tiles = [];
-  let pieces = [];
+  let tiles = []; //tile objects
+  let pieces = []; //piece objects
 
   function Board() {
     this.board = board;
@@ -81,20 +86,25 @@ window.onload = function () {
   }
 
   Board.prototype.initialize = function () {
-    for (row in this.board) {
-      for (col in this.board[row]) {
-
+    for (let row in this.board) {
+      for (let col in this.board[row]) {
         let tile = '<div class="tile" style=top:%top%;left:%left%;></div>';
-        newTile = tile.replace('%top%', this.viewPorts[row]);
+        let newTile = tile.replace('%top%', this.viewPorts[row]);
         newTile = newTile.replace('%left%', this.viewPorts[col]);
-        document.querySelector('.tiles').insertAdjacentHTML('beforeend', newTile);
+
+        if (row % 2 === 1 && col % 2 === 0 || row % 2 === 0 && col % 2 === 1) {
+          document.querySelector('.tiles').insertAdjacentHTML('beforeend', newTile);
+        } else {
+          document.querySelector('.non-active-tiles').insertAdjacentHTML('beforeend', newTile);
+        }
 
         if (this.board[row][col] !== 0) {
           let piece = '<div class="piece" style=top:%top%;left:%left%;></div>';
-          newPiece = piece.replace('%top%', this.viewPorts[row]);
+          let newPiece = piece.replace('%top%', this.viewPorts[row]);
           newPiece = newPiece.replace('%left%', this.viewPorts[col]);
+          let pieceObject = new __WEBPACK_IMPORTED_MODULE_0__piece__["a" /* default */](newPiece, [parseInt(row), parseInt(col)]);
+          pieces.push(pieceObject);
           // newPiece = newPiece.replace('%piece%',this.board[row][col]);
-
           document.querySelector('.player' + this.board[row][col] + 'pieces').insertAdjacentHTML('beforeend', newPiece);
         }
       }
@@ -103,7 +113,21 @@ window.onload = function () {
 
   let boardObj = new Board();
   boardObj.initialize();
+  console.log(board);
+  console.log(pieces);
 };
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Piece(element, position) {
+  this.element = element;
+  this.position = position;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Piece);
 
 /***/ })
 /******/ ]);
