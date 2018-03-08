@@ -1,4 +1,5 @@
 import Piece from './piece';
+import Tile from './tile';
 
 window.onload = function(){
 
@@ -30,6 +31,8 @@ window.onload = function(){
         newTile = newTile.replace('%left%',this.viewPorts[col]);
 
         if((row % 2 === 1 && col % 2 === 0) || (row % 2 === 0 && col % 2 === 1)){
+          let tileObject = new Tile(newTile,[parseInt(row),parseInt(col)]);
+          tiles.push(tileObject);
           document.querySelector('.tiles').insertAdjacentHTML('beforeend',newTile);
         }else{
           document.querySelector('.non-active-tiles').insertAdjacentHTML('beforeend',newTile);
@@ -53,6 +56,7 @@ window.onload = function(){
   boardObj.initialize();
   console.log(board);
   console.log(pieces);
+  console.log(tiles);
 
 
 
