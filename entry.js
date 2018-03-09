@@ -81,8 +81,26 @@ window.onload = function(){
   //   3. Loop thru each piece element and remove selected class
   //   4. Add selected class to the selected piece
 
-  document.querySelector('.pieces').addEventListener("click", function(){
-    console.log('hi')
+  document.querySelector('.pieces').addEventListener("click", function(e){
+    // need to get rid of selected class on all piece elements
+    document.querySelectorAll('.piece').forEach(node => {
+      node.classList.remove("selected")
+    })
+
+    let pieceNumber = e.target.id.substr(5,6);
+    if(boardObj.playerTurn === 1){
+      if(pieceNumber < 12){
+        e.target.classList.add("selected");
+        console.log(e.target.id.substr(5,6))
+
+      }
+    }else{
+      if(pieceNumber >= 12){
+        e.target.classList.add("selected");
+        console.log(e.target.id.substr(5,6))
+
+      }
+    }
   })
 
 
