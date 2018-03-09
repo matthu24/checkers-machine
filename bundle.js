@@ -89,20 +89,24 @@ window.onload = function () {
 
   Board.prototype.initialize = function () {
     let pieceCount = 0;
+    let tileCount = 0;
     for (let row in this.board) {
       for (let col in this.board[row]) {
-        let tile = '<div class="tile" style=top:%top%;left:%left%;></div>';
+        let tile = '<div class=tile id=tile%id% style=top:%top%;left:%left%;></div>';
         let newTile = tile.replace('%top%', this.viewPorts[row]);
         newTile = newTile.replace('%left%', this.viewPorts[col]);
+        newTile = newTile.replace('%id%', tileCount);
 
         if (row % 2 === 1 && col % 2 === 0 || row % 2 === 0 && col % 2 === 1) {
-          let tileObject = new __WEBPACK_IMPORTED_MODULE_1__tile__["a" /* default */](newTile, [parseInt(row), parseInt(col)]);
-          tiles.push(tileObject);
           document.querySelector('.tiles').insertAdjacentHTML('beforeend', newTile);
+          let tileObject = new __WEBPACK_IMPORTED_MODULE_1__tile__["a" /* default */](document.querySelector('#tile' + tileCount), [parseInt(row), parseInt(col)]);
+          tiles.push(tileObject);
+          tileCount += 1;
         } else {
           document.querySelector('.non-active-tiles').insertAdjacentHTML('beforeend', newTile);
         }
 
+        //appending
         if (this.board[row][col] !== 0) {
           let piece = '<div class="piece" id=piece%id% style=top:%top%;left:%left%;></div>';
           let newPiece = piece.replace('%top%', this.viewPorts[row]);
@@ -133,6 +137,17 @@ window.onload = function () {
   console.log(boardObj.board);
   console.log(pieces);
   console.log(tiles);
+
+  //events
+  // 1. Selection of piece $('.piece').on("click", function () {
+  //   1. Check if the piece belongs to the player who’s turn it is
+  //   2. If so, put selected class on piece
+  //   3. Loop thru each piece element and remove selected class
+  //   4. Add selected class to the selected piece
+
+  document.querySelector('.pieces').addEventListener("click", function () {
+    console.log('hi');
+  });
 };
 
 /***/ }),
