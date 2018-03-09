@@ -64,15 +64,13 @@ window.onload = function(){
   //change this.playerTurn
   Board.prototype.move = function(piece,tile){
     //pass in the tile object and piece object
-
+    piece.classList.remove('selected')
     this.playerTurn = this.playerTurn === 1? 2 : 1;
   }
 
   let boardObj = new Board();
   boardObj.initialize();
-  console.log(boardObj.board);
-  console.log(pieces);
-  console.log(tiles);
+  console.log(boardObj.playerTurn)
 
   //events
   // 1. Selection of piece $('.piece').on("click", function () {
@@ -90,15 +88,26 @@ window.onload = function(){
     if(boardObj.playerTurn === 1){
       if(pieceNumber < 12){
         e.target.classList.add("selected");
-        console.log(e.target.id.substr(5,6))
+        // console.log(e.target.id.substr(5,6))
 
       }
     }else{
       if(pieceNumber >= 12){
         e.target.classList.add("selected");
-        console.log(e.target.id.substr(5,6))
+        // console.log(e.target.id.substr(5,6))
 
       }
     }
   })
+
+  document.querySelector('.tiles').addEventListener(("click"),function(e){
+    //make sure a tile is selected
+    let selected = document.querySelector('.selected');
+    if(selected){
+      // console.log(e.target.id.substr(4,5))
+      boardObj.move(selected,e.target)
+      console.log(boardObj.playerTurn)
+
+    }
+  });
 }

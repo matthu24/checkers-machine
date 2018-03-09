@@ -54,3 +54,7 @@
 .player1pieces .selected{
   box-shadow: 0 0 8px 4px #6600cc;
 }
+
+.player2pieces .selected{
+  box-shadow: 0 0 8px 4px #6600cc;
+}
