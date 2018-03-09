@@ -24,6 +24,7 @@ window.onload = function(){
   }
 
   Board.prototype.initialize = function(){
+    let pieceCount = 0;
     for(let row in this.board){
       for(let col in this.board[row]){
         let tile = '<div class="tile" style=top:%top%;left:%left%;></div>';
@@ -39,22 +40,33 @@ window.onload = function(){
         }
 
         if(this.board[row][col] !== 0){
-          let piece = '<div class="piece" style=top:%top%;left:%left%;></div>';
+          let piece = '<div class="piece" id=piece%id% style=top:%top%;left:%left%;></div>';
           let newPiece = piece.replace('%top%',this.viewPorts[row]);
           newPiece = newPiece.replace('%left%',this.viewPorts[col]);
-          let pieceObject = new Piece(newPiece,[parseInt(row),parseInt(col)]);
-          pieces.push(pieceObject);
+          newPiece = newPiece.replace('%id%',pieceCount)
           // newPiece = newPiece.replace('%piece%',this.board[row][col]);
           document.querySelector('.player' + this.board[row][col] + 'pieces').insertAdjacentHTML('beforeend',newPiece);
-
+          let pieceObject = new Piece(document.querySelector('#piece'+String(pieceCount)),[parseInt(row),parseInt(col)]);
+          pieces.push(pieceObject);
+          pieceCount+=1;
         }
       }
     }
   }
 
+  //update this.board
+  //update html piece node style: change the position
+  //call piece.move to update the piece object
+  //change this.playerTurn
+  Board.prototype.move = function(piece,tile){
+    //pass in the tile object and piece object
+
+    this.playerTurn = this.playerTurn === 1? 2 : 1;
+  }
+
   let boardObj = new Board();
   boardObj.initialize();
-  console.log(board);
+  console.log(boardObj.board);
   console.log(pieces);
   console.log(tiles);
 
