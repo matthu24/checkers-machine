@@ -141,9 +141,8 @@ window.onload = function () {
   //events
   // 1. Selection of piece $('.piece').on("click", function () {
   //   1. Check if the piece belongs to the player who’s turn it is
-  //   2. If so, put selected class on piece
-  //   3. Loop thru each piece element and remove selected class
-  //   4. Add selected class to the selected piece
+  //   2. Loop thru each piece element and remove selected class
+  //   3. Add selected class to the selected piece
 
   document.querySelector('.pieces').addEventListener("click", function (e) {
     // need to get rid of selected class on all piece elements

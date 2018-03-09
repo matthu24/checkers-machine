@@ -50,3 +50,7 @@
   cursor:pointer;
   background-color: #8c1aff;
 }
+
+.player1pieces .selected{
+  box-shadow: 0 0 8px 4px #6600cc;
+}
