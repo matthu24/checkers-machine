@@ -68,27 +68,51 @@ window.onload = function(){
     //pass in the tile object and piece object
 
     //update this.board
-    let startX = piece.position[0];
-    let startY = piece.position[1];
-    let endX = tile.position[0];
-    let endY = tile.position[1];
-    let temp = this.board[startX][startY];
-    this.board[startX][startY] = this.board[endX][endY];
-    this.board[endX][endY] = temp;
+    if(this.isValidMove(piece,tile)){
+      let startX = piece.position[0];
+      let startY = piece.position[1];
+      let endX = tile.position[0];
+      let endY = tile.position[1];
+      let temp = this.board[startX][startY];
+      this.board[startX][startY] = this.board[endX][endY];
+      this.board[endX][endY] = temp;
 
-    //update css through piece.move method
-    //save the new html element position
-    let newStylePos = [this.viewPorts[endX],this.viewPorts[endY]];
-    //update piece element style position and the piece array position
-    piece.move(tile,newStylePos)
-    //this is what is happening in piece.move:
-    // piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`
-    // piece.position = tile.position;
+      //update css through piece.move method
+      //save the new html element position
+      let newStylePos = [this.viewPorts[endX],this.viewPorts[endY]];
+      //update piece element style position and the piece array position
+      piece.move(tile,newStylePos)
+      //this is what is happening in piece.move:
+      // piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`
+      // piece.position = tile.position;
 
-    piece.element.classList.remove('selected')
-    this.playerTurn = this.playerTurn === 1? 2 : 1;
-    console.log(pieces)
+      piece.element.classList.remove('selected')
+      this.playerTurn = this.playerTurn === 1? 2 : 1;
+      console.log(pieces)
+    }
 
+  }
+
+  Board.prototype.isValidMove = function(piece,tile){
+    if(Math.abs(tile.position[1]-piece.position[1]) !== 1){
+      return false;
+    }else if(this.board[tile.position[0]][tile.position[1]] !== 0){
+      return false;
+    }
+    if(this.playerTurn === 1){
+      //endX must be one greater than startX
+      if(tile.position[0]-piece.position[0] !== 1){
+        return false;
+      }else{
+        return true;
+      }
+    }else{
+      if(tile.position[0]-piece.position[0] !== -1){
+        return false;
+      }else{
+        return true;
+      }
+    }
   }
 
   let boardObj = new Board();
@@ -129,7 +153,7 @@ window.onload = function(){
     let selectedPiece;
     let selectedTile;
     if(selected){
-      //find selected piece and tile
+      //find selected piece and tile from pieces array
       pieces.forEach(piece => {
         if(selected.id === piece.element.id){
           selectedPiece = piece;
