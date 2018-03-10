@@ -128,13 +128,29 @@ window.onload = function () {
   //change this.playerTurn
   Board.prototype.move = function (piece, tile) {
     //pass in the tile object and piece object
-    piece.classList.remove('selected');
+
+    //update this.board
+    let startX = piece.position[0];
+    let startY = piece.position[1];
+    let endX = tile.position[0];
+    let endY = tile.position[1];
+    let temp = this.board[startX][startY];
+    this.board[startX][startY] = this.board[endX][endY];
+    this.board[endX][endY] = temp;
+
+    //update html piece node style: change the position
+    let newStylePos = [this.viewPorts[endX], this.viewPorts[endY]];
+    piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`;
+    piece.position = tile.position;
+
+    piece.element.classList.remove('selected');
     this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+    console.log(this.board);
   };
 
   let boardObj = new Board();
   boardObj.initialize();
-  console.log(boardObj.playerTurn);
+  console.log(pieces);
 
   //events
   // 1. Selection of piece $('.piece').on("click", function () {
@@ -165,10 +181,21 @@ window.onload = function () {
   document.querySelector('.tiles').addEventListener("click", function (e) {
     //make sure a tile is selected
     let selected = document.querySelector('.selected');
+    let selectedPiece;
+    let selectedTile;
     if (selected) {
-      // console.log(e.target.id.substr(4,5))
-      boardObj.move(selected, e.target);
-      console.log(boardObj.playerTurn);
+      //find selected piece and tile
+      pieces.forEach(piece => {
+        if (selected.id === piece.element.id) {
+          selectedPiece = piece;
+        }
+      });
+      tiles.forEach(tile => {
+        if (e.target.id === tile.element.id) {
+          selectedTile = tile;
+        }
+      });
+      boardObj.move(selectedPiece, selectedTile);
     }
   });
 };
