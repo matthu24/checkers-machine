@@ -33,6 +33,10 @@
   padding: 3vmin;
   margin-top: 1.1vmin;
   margin-left: 1.1vmin;
+
+
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
 }
 
 .player2pieces .piece{
@@ -44,6 +48,9 @@
   padding: 3vmin;
   margin-top: 1.1vmin;
   margin-left: 1.1vmin;
+
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
 }
 
 .piece:hover{
@@ -53,8 +60,11 @@
 
 .player1pieces .selected{
   box-shadow: 0 0 8px 4px #6600cc;
+
 }
 
 .player2pieces .selected{
   box-shadow: 0 0 8px 4px #6600cc;
+
+
 }
