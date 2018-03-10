@@ -15,7 +15,7 @@ window.onload = function(){
   ];
 
   //we can access and update actual piece object info here
-  //the object contains the actual html element, and the position corresponding to this.board 
+  //the object contains the actual html element, and the position corresponding to this.board
   let tiles= []; //tile objects
   let pieces = []; //piece objects
 
@@ -76,11 +76,14 @@ window.onload = function(){
     this.board[startX][startY] = this.board[endX][endY];
     this.board[endX][endY] = temp;
 
-    //update html piece node style: change the position
+    //update css through piece.move method
+    //save the new html element position
     let newStylePos = [this.viewPorts[endX],this.viewPorts[endY]];
+    //update piece element style position and the piece array position
+    piece.move(tile,newStylePos)
+    //this is what is happening in piece.move:
     // piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`
     // piece.position = tile.position;
-    piece.move(tile,newStylePos)
 
     piece.element.classList.remove('selected')
     this.playerTurn = this.playerTurn === 1? 2 : 1;
