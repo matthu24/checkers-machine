@@ -108,7 +108,6 @@ window.onload = function () {
           document.querySelector('.non-active-tiles').insertAdjacentHTML('beforeend', newTile);
         }
 
-        //appending
         if (this.board[row][col] !== 0) {
           let piece = '<div class="piece" id=piece%id% style=top:%top%;left:%left%;></div>';
           let newPiece = piece.replace('%top%', this.viewPorts[row]);
@@ -132,7 +131,7 @@ window.onload = function () {
     //pass in the tile object and piece object
 
     //update this.board
-    if (this.isValidMove(piece, tile)) {
+    if (this.isValidMove(piece, tile) || this.isValidJump(piece, tile)) {
       let startX = piece.position[0];
       let startY = piece.position[1];
       let endX = tile.position[0];
@@ -140,26 +139,92 @@ window.onload = function () {
       let temp = this.board[startX][startY];
       this.board[startX][startY] = this.board[endX][endY];
       this.board[endX][endY] = temp;
-
       //update css through piece.move method
       //save the new html element position
       let newStylePos = [this.viewPorts[endX], this.viewPorts[endY]];
       //update piece element style position and the piece array position
       piece.move(tile, newStylePos);
-      //this is what is happening in piece.move:
-      // piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`
-      // piece.position = tile.position;
-
       piece.element.classList.remove('selected');
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
-      console.log(pieces);
+      console.log(this.board);
+    }
+  };
+
+  Board.prototype.jump = function (piece, tile) {
+    //opponentPosition in the form of [x,y] of the board
+    let opponentPosition = this.isValidJump(piece, tile);
+    if (opponentPosition) {
+      console.log(opponentPosition);
+      this.move(piece, tile);
+      //remove opponent from board
+    }
+  };
+
+  //if false return false if true return the position of piece to be removed
+  Board.prototype.isValidJump = function (piece, tile) {
+    //destination is occupied
+    if (this.board[tile.position[0]][tile.position[1]] !== 0) {
+      return false;
+    }
+
+    let opponentPosition;
+
+    if (this.playerTurn === 1) {
+      //get direction of attempted jump (positive or negative):
+      //For a jump in pos direction-->
+      if (tile.position[1] - piece.position[1] > 0) {
+        //nothing is there to jump
+        if (this.board[piece.position[0] + 1][piece.position[1] + 1] !== 2) {
+          return false;
+        } else {
+          opponentPosition = [piece.position[0] + 1, piece.position[1] + 1];
+        }
+        //for a jump in neg direction -->
+      } else {
+        if (this.board[piece.position[0] + 1][piece.position[1] - 1] !== 2) {
+          return false;
+        } else {
+          opponentPosition = [piece.position[0] + 1, piece.position[1] - 1];
+        }
+      }
+      //endX must be one greater than startX: must go forward two spaces
+      if (tile.position[0] - piece.position[0] !== 2) {
+        return false;
+      } else {
+        return opponentPosition;
+      }
+    } else {
+      //get direction of attempted jump (positive or negative):
+      //For a jump in pos direction-->
+      if (tile.position[1] - piece.position[1] > 0) {
+        //nothing is there to jump
+        if (this.board[piece.position[0] - 1][piece.position[1] + 1] !== 1) {
+          return false;
+        } else {
+          opponentPosition = [piece.position[0] - 1, piece.position[1] + 1];
+        }
+        //for a jump in neg direction -->
+      } else {
+        if (this.board[piece.position[0] - 1][piece.position[1] - 1] !== 1) {
+          return false;
+        } else {
+          opponentPosition = [piece.position[0] - 1, piece.position[1] - 1];
+        }
+      }
+
+      if (tile.position[0] - piece.position[0] !== -2) {
+        return false;
+      } else {
+        return opponentPosition;
+      }
     }
   };
 
   Board.prototype.isValidMove = function (piece, tile) {
-    if (Math.abs(tile.position[1] - piece.position[1]) !== 1) {
-      return false;
-    } else if (this.board[tile.position[0]][tile.position[1]] !== 0) {
+    // if(Math.abs(tile.position[1]-piece.position[1]) !== 1){
+    //   return false;
+    //destination is occupied
+    if (this.board[tile.position[0]][tile.position[1]] !== 0) {
       return false;
     }
     if (this.playerTurn === 1) {
@@ -180,7 +245,7 @@ window.onload = function () {
 
   let boardObj = new Board();
   boardObj.initialize();
-  console.log(pieces);
+  // console.log(pieces)
 
   //events
   // 1. Selection of piece $('.piece').on("click", function () {
@@ -225,7 +290,14 @@ window.onload = function () {
           selectedTile = tile;
         }
       });
-      boardObj.move(selectedPiece, selectedTile);
+      //initial check to see if attempted move is normal or a jump
+      if (Math.abs(selectedTile.position[1] - selectedPiece.position[1]) === 1) {
+
+        boardObj.move(selectedPiece, selectedTile);
+      } else if (Math.abs(selectedTile.position[1] - selectedPiece.position[1]) === 2) {
+
+        boardObj.jump(selectedPiece, selectedTile);
+      }
     }
   });
 };
