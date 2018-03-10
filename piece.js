@@ -4,9 +4,10 @@ function Piece(element, position){
 }
 
 //update this.element and this.position
-//update
-Piece.prototype.move = function(tile){
-  
+
+Piece.prototype.move = function(tile,newStylePos){
+  this.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`
+  this.position = tile.position;
 }
 
 export default Piece;

@@ -78,6 +78,8 @@ window.onload = function () {
 
   let board = [[0, 1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1, 0], [0, 1, 0, 1, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [2, 0, 2, 0, 2, 0, 2, 0], [0, 2, 0, 2, 0, 2, 0, 2], [2, 0, 2, 0, 2, 0, 2, 0]];
 
+  //we can access and update actual piece object info here
+  //the object contains the actual html element, and the position corresponding to this.board 
   let tiles = []; //tile objects
   let pieces = []; //piece objects
 
@@ -140,12 +142,13 @@ window.onload = function () {
 
     //update html piece node style: change the position
     let newStylePos = [this.viewPorts[endX], this.viewPorts[endY]];
-    piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`;
-    piece.position = tile.position;
+    // piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`
+    // piece.position = tile.position;
+    piece.move(tile, newStylePos);
 
     piece.element.classList.remove('selected');
     this.playerTurn = this.playerTurn === 1 ? 2 : 1;
-    console.log(this.board);
+    console.log(pieces);
   };
 
   let boardObj = new Board();
@@ -211,8 +214,11 @@ function Piece(element, position) {
 }
 
 //update this.element and this.position
-//update
-Piece.prototype.move = function (tile) {};
+
+Piece.prototype.move = function (tile, newStylePos) {
+  this.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`;
+  this.position = tile.position;
+};
 
 /* harmony default export */ __webpack_exports__["a"] = (Piece);
 

@@ -14,6 +14,8 @@ window.onload = function(){
     [  2,  0,  2,  0,  2,  0,  2,  0 ]
   ];
 
+  //we can access and update actual piece object info here
+  //the object contains the actual html element, and the position corresponding to this.board 
   let tiles= []; //tile objects
   let pieces = []; //piece objects
 
@@ -76,12 +78,14 @@ window.onload = function(){
 
     //update html piece node style: change the position
     let newStylePos = [this.viewPorts[endX],this.viewPorts[endY]];
-    piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`
-    piece.position = tile.position;
+    // piece.element.style = `top:${newStylePos[0]};left:${newStylePos[1]};`
+    // piece.position = tile.position;
+    piece.move(tile,newStylePos)
 
     piece.element.classList.remove('selected')
     this.playerTurn = this.playerTurn === 1? 2 : 1;
-    console.log(this.board)
+    console.log(pieces)
+
   }
 
   let boardObj = new Board();
