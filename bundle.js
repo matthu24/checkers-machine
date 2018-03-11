@@ -153,10 +153,24 @@ window.onload = function () {
   Board.prototype.jump = function (piece, tile) {
     //opponentPosition in the form of [x,y] of the board
     let opponentPosition = this.isValidJump(piece, tile);
+    let opponentElement;
+    console.log(opponentElement);
     if (opponentPosition) {
       console.log(opponentPosition);
       this.move(piece, tile);
       //remove opponent from board
+      //1. remove from this.board, turn posiiton to zero
+      this.board[opponentPosition[0]][opponentPosition[1]] = 0;
+      //2. remove html node
+      // elem.parentNode.removeChild(elem);
+      //find the piece object that we need to remove according to its position
+      pieces.forEach(piece => {
+        if (piece.position[0] === opponentPosition[0] && piece.position[1] === opponentPosition[1]) {
+          opponentElement = piece;
+        }
+      });
+      console.log(opponentElement);
+      opponentElement.element.parentNode.removeChild(opponentElement.element);
     }
   };
 
