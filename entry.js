@@ -86,6 +86,10 @@ window.onload = function(){
     }
   }
 
+
+  //1. remove from this.board
+  //2. remove html node
+  //3. remove piece from pieces array 
   Board.prototype.jump = function(piece,tile){
     //opponentPosition in the form of [x,y] of the board
     let opponentPosition = this.isValidJump(piece,tile);
@@ -103,10 +107,13 @@ window.onload = function(){
       pieces.forEach(piece => {
         if(piece.position[0] === opponentPosition[0] && piece.position[1] === opponentPosition[1]){
           opponentElement = piece;
+          //3. remove the piece from pieces
+          pieces.splice(pieces.indexOf(piece),1)
         }
       })
       console.log(opponentElement)
       opponentElement.element.parentNode.removeChild(opponentElement.element);
+
     }
   }
 
