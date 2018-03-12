@@ -68,9 +68,14 @@
 }
 
 .player1pieces .king{
-  background-color: yellow;
+  background-image: url("king1.png");
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .player2pieces .king{
-  background-color: yellow;
+  background-image: url("king1.png");
+  background-repeat: no-repeat;
+  background-position: center;
+
 }
