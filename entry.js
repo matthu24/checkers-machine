@@ -67,7 +67,8 @@ window.onload = function(){
     //pass in the tile object and piece object
 
     //update this.board
-    if(this.isValidMove(piece,tile) || this.isValidJump(piece,tile)){
+    if((!piece.king && (this.isValidMove(piece,tile) || this.isValidJump(piece,tile))) ||
+     piece.king && (this.isValidKingMove(piece,tile) || this.isValidKingJump(piece,tile))){
       let startX = piece.position[0];
       let startY = piece.position[1];
       let endX = tile.position[0];
@@ -214,7 +215,17 @@ window.onload = function(){
   }
 
   Board.prototype.isValidKingMove = function(piece,tile){
-
+    if(this.board[tile.position[0]][tile.position[1]] !== 0){
+      return false;
+    }
+    if(this.playerTurn === 1){
+      //endX must be one greater than startX
+      if(tile.position[0]-piece.position[0] !== 1 && tile.position[0]-piece.position[0] !== -1){
+        return false;
+      }else{
+        return true;
+      }
+    }
   }
 
   Board.prototype.isValidKingJump = function(piece,tile){
@@ -223,10 +234,17 @@ window.onload = function(){
 
   Board.prototype.kingMove = function(piece,tile){
     console.log('king tried to move')
+    if(this.isValidKingMove(piece,tile)){
+      console.log(pieces)
+      this.move(piece,tile);
+    }
   }
 
   Board.prototype.kingJump = function(piece,tile){
     console.log('king tried to jump')
+    if(this.isValidKingJump(piece,tile)){
+      this.move(piece,tile);
+    }
   }
 
 
