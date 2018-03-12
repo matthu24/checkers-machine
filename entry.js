@@ -106,7 +106,12 @@ window.onload = function(){
   //3. remove piece from pieces array
   Board.prototype.jump = function(piece,tile){
     //opponentPosition in the form of [x,y] of the board
-    let opponentPosition = this.isValidJump(piece,tile);
+    let opponentPosition;
+    if(!piece.king){
+      opponentPosition = this.isValidJump(piece,tile);
+    }else if(piece.king){
+      opponentPosition = this.isValidKingJump(piece,tile);
+    }
     let opponentElement;
     console.log(opponentElement)
     if(opponentPosition){
@@ -218,18 +223,70 @@ window.onload = function(){
     if(this.board[tile.position[0]][tile.position[1]] !== 0){
       return false;
     }
-    if(this.playerTurn === 1){
-      //endX must be one greater than startX
-      if(tile.position[0]-piece.position[0] !== 1 && tile.position[0]-piece.position[0] !== -1){
-        return false;
-      }else{
-        return true;
-      }
+    //endX must be one greater or one less than startX
+    if(tile.position[0]-piece.position[0] !== 1 && tile.position[0]-piece.position[0] !== -1){
+      return false;
+    }else{
+      return true;
     }
   }
 
-  Board.prototype.isValidKingJump = function(piece,tile){
 
+  Board.prototype.isValidKingJump = function(piece,tile){
+    //destination is occupied
+    if(this.board[tile.position[0]][tile.position[1]] !== 0){
+      return false;
+    }
+
+    let opponentPosition;
+    let opponentNumber = this.playerTurn === 1 ? 2 : 1;
+
+    //jump to the right & up the board
+    if((tile.position[1]-piece.position[1] > 0) && (tile.position[0]-piece.position[0] < 0)){
+      //nothing is there to jump
+      if(this.board[piece.position[0]-1][piece.position[1]+1] !== opponentNumber){
+        console.log('failed here')
+        return false;
+      }else{
+        opponentPosition = [piece.position[0]+1,piece.position[1]-1]
+      }
+    //jump to the right and down the board
+    }else if(tile.position[1]-piece.position[1] > 0 && tile.position[0]-piece.position[0] > 0){
+      //nothing is there to jump
+      if(this.board[piece.position[0]+1][piece.position[1]+1] !== opponentNumber){
+        console.log('failed here')
+        return false;
+      }else{
+        opponentPosition = [piece.position[0]+1,piece.position[1]+1]
+      }
+      //jump to the left and down the board
+    }else if(tile.position[1]-piece.position[1] < 0 && tile.position[0]-piece.position[0] > 0){
+      //nothing is there to jump
+      if(this.board[piece.position[0]+1][piece.position[1]-1] !== opponentNumber){
+        console.log('failed here')
+        return false;
+      }else{
+        opponentPosition = [piece.position[0]-1,piece.position[1]+1]
+      }
+    }else if(tile.position[1]-piece.position[1] < 0 && tile.position[0]-piece.position[0] < 0){
+      //nothing is there to jump
+      if(this.board[piece.position[0]-1][piece.position[1]-1] !== opponentNumber){
+        console.log('failed here')
+        return false;
+      }else{
+        opponentPosition = [piece.position[0]-1,piece.position[1]-1]
+      }
+    }
+
+
+
+    //endX must be two greater than startX: must go forward two spaces
+    if(Math.abs(tile.position[0]-piece.position[0]) !== 2){
+      console.log('failed here')
+      return false;
+    }else{
+      return opponentPosition;
+    }
   }
 
   Board.prototype.kingMove = function(piece,tile){
@@ -243,7 +300,8 @@ window.onload = function(){
   Board.prototype.kingJump = function(piece,tile){
     console.log('king tried to jump')
     if(this.isValidKingJump(piece,tile)){
-      this.move(piece,tile);
+      console.log('king jump valid')
+      this.jump(piece,tile);
     }
   }
 
