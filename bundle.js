@@ -150,11 +150,8 @@ window.onload = function () {
 
       if (!piece.king && this.playerTurn === 1 && piece.position[0] === 7) {
         piece.makeKing();
-        console.log(piece.king);
       } else if (!piece.king && this.playerTurn === 2 && piece.position[0] === 0) {
         piece.makeKing();
-
-        console.log(piece.king);
       }
 
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
@@ -173,10 +170,9 @@ window.onload = function () {
     } else if (piece.king) {
       opponentPosition = this.isValidKingJump(piece, tile);
     }
+    console.log(opponentPosition);
     let opponentElement;
-    console.log(opponentElement);
     if (opponentPosition) {
-      console.log(opponentPosition);
       this.move(piece, tile);
       //remove opponent from board
       //1. remove from this.board, turn posiiton to zero
@@ -192,6 +188,7 @@ window.onload = function () {
         }
       });
       console.log(opponentElement);
+      console.log(this.board);
       opponentElement.element.parentNode.removeChild(opponentElement.element);
     }
   };
@@ -307,7 +304,7 @@ window.onload = function () {
         console.log('failed here');
         return false;
       } else {
-        opponentPosition = [piece.position[0] + 1, piece.position[1] - 1];
+        opponentPosition = [piece.position[0] - 1, piece.position[1] + 1];
       }
       //jump to the right and down the board
     } else if (tile.position[1] - piece.position[1] > 0 && tile.position[0] - piece.position[0] > 0) {
@@ -325,7 +322,7 @@ window.onload = function () {
         console.log('failed here');
         return false;
       } else {
-        opponentPosition = [piece.position[0] - 1, piece.position[1] + 1];
+        opponentPosition = [piece.position[0] + 1, piece.position[1] - 1];
       }
     } else if (tile.position[1] - piece.position[1] < 0 && tile.position[0] - piece.position[0] < 0) {
       //nothing is there to jump
@@ -347,17 +344,16 @@ window.onload = function () {
   };
 
   Board.prototype.kingMove = function (piece, tile) {
-    console.log('king tried to move');
     if (this.isValidKingMove(piece, tile)) {
-      console.log(pieces);
+      // console.log(pieces)
       this.move(piece, tile);
     }
   };
 
   Board.prototype.kingJump = function (piece, tile) {
-    console.log('king tried to jump');
+    // console.log('king tried to jump')
     if (this.isValidKingJump(piece, tile)) {
-      console.log('king jump valid');
+      // console.log('king jump valid')
       this.jump(piece, tile);
     }
   };
