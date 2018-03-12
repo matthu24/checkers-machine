@@ -12,7 +12,7 @@ Piece.prototype.move = function(tile,newStylePos){
 }
 
 Piece.prototype.makeKing = function(){
-  
+  this.king = true; 
 }
 
 export default Piece;

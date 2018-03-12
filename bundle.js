@@ -145,14 +145,23 @@ window.onload = function () {
       //update piece element style position and the piece array position
       piece.move(tile, newStylePos);
       piece.element.classList.remove('selected');
+
+      //check if need to turn piece into king
+
+      if (!piece.king && this.playerTurn === 1 && piece.position[0] === 7) {
+        console.log('player 1: king me');
+      } else if (!piece.king && this.playerTurn === 2 && piece.position[0] === 0) {
+        console.log('player 2: king me');
+      }
+
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
-      console.log(this.board);
+      // console.log(this.board)
     }
   };
 
   //1. remove from this.board
   //2. remove html node
-  //3. remove piece from pieces array 
+  //3. remove piece from pieces array
   Board.prototype.jump = function (piece, tile) {
     //opponentPosition in the form of [x,y] of the board
     let opponentPosition = this.isValidJump(piece, tile);
@@ -339,7 +348,9 @@ Piece.prototype.move = function (tile, newStylePos) {
   this.position = tile.position;
 };
 
-Piece.prototype.makeKing = function () {};
+Piece.prototype.makeKing = function () {
+  this.king = true;
+};
 
 /* harmony default export */ __webpack_exports__["a"] = (Piece);
 
