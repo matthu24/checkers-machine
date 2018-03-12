@@ -85,10 +85,13 @@ window.onload = function(){
       //check if need to turn piece into king
 
       if(!piece.king && this.playerTurn === 1 && piece.position[0] === 7 ){
-        console.log('player 1: king me')
-      }else if(!piece.king && this.playerTurn === 2 && piece.position[0] === 0){
-        console.log('player 2: king me')
+        piece.makeKing();
+        console.log(piece.king)
 
+      }else if(!piece.king && this.playerTurn === 2 && piece.position[0] === 0){
+        piece.makeKing();
+
+        console.log(piece.king)
       }
 
       this.playerTurn = this.playerTurn === 1? 2 : 1;
@@ -210,6 +213,24 @@ window.onload = function(){
     }
   }
 
+  Board.prototype.isValidKingMove = function(piece,tile){
+
+  }
+
+  Board.prototype.isValidKingJump = function(piece,tile){
+
+  }
+
+  Board.prototype.kingMove = function(piece,tile){
+    console.log('king tried to move')
+  }
+
+  Board.prototype.kingJump = function(piece,tile){
+    console.log('king tried to jump')
+  }
+
+
+
   let boardObj = new Board();
   boardObj.initialize();
   // console.log(pieces)
@@ -259,11 +280,17 @@ window.onload = function(){
       })
       //initial check to see if attempted move is normal or a jump
       if(Math.abs(selectedTile.position[1]-selectedPiece.position[1]) === 1){
-
-        boardObj.move(selectedPiece,selectedTile);
+        if(selectedPiece.king){
+          boardObj.kingMove(selectedPiece,selectedTile);
+        }else{
+          boardObj.move(selectedPiece,selectedTile);
+        }
       }else if (Math.abs(selectedTile.position[1]-selectedPiece.position[1]) === 2) {
-
-        boardObj.jump(selectedPiece,selectedTile);
+        if(selectedPiece.king){
+          boardObj.kingJump(selectedPiece,selectedTile);
+        }else{
+          boardObj.jump(selectedPiece,selectedTile);
+        }
       }
     }
   });

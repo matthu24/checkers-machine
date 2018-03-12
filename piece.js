@@ -12,7 +12,8 @@ Piece.prototype.move = function(tile,newStylePos){
 }
 
 Piece.prototype.makeKing = function(){
-  this.king = true; 
+  this.king = true;
+  this.element.classList.add('king') 
 }
 
 export default Piece;
