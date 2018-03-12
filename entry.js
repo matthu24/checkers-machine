@@ -90,10 +90,7 @@ window.onload = function(){
 
       }else if(!piece.king && this.playerTurn === 2 && piece.position[0] === 0){
         piece.makeKing();
-
-
       }
-
       this.playerTurn = this.playerTurn === 1? 2 : 1;
       // console.log(this.board)
     }
@@ -133,6 +130,7 @@ window.onload = function(){
       opponentElement.element.parentNode.removeChild(opponentElement.element);
 
     }
+    this.gameOver();
   }
 
   //if false return false if true return the position of piece to be removed
@@ -300,6 +298,34 @@ window.onload = function(){
     if(this.isValidKingJump(piece,tile)){
       // console.log('king jump valid')
       this.jump(piece,tile);
+    }
+  }
+
+  Board.prototype.clearBoard = function(){
+    Location.reload();
+  }
+
+  Board.prototype.gameOver = function(){
+    let player1Counter = 0;
+    let player2Counter = 0;
+    for(let i=0;i < this.board.length;i++){
+      for(let j=0; j < this.board[0].length; j++){
+        if(this.board[i][j] === 1){
+          player1Counter += 1;
+        }else if(this.board[i][j] === 2){
+          player2Counter += 1;
+        }
+      }
+    }
+    if(player1Counter === 0 || player2Counter === 0){
+      if(player1Counter > 0){
+        console.log('player 1 wins')
+      }else{
+        console.log('player 2 wins')
+      }
+      return true;
+    }else{
+      return false;
     }
   }
 
