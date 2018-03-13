@@ -359,7 +359,7 @@ window.onload = function () {
   };
 
   Board.prototype.clearBoard = function () {
-    Location.reload();
+    location.reload();
   };
 
   Board.prototype.gameOver = function () {
@@ -376,9 +376,11 @@ window.onload = function () {
     }
     if (player1Counter === 0 || player2Counter === 0) {
       if (player1Counter > 0) {
-        console.log('player 1 wins');
+        console.log('player 1 wins!');
+        document.querySelector('.victory').textContent = 'player 1 wins';
       } else {
-        console.log('player 2 wins');
+        console.log('player 2 wins!');
+        document.querySelector('.victory').textContent = 'player 2 wins';
       }
       return true;
     } else {
@@ -448,6 +450,9 @@ window.onload = function () {
         }
       }
     }
+  });
+  document.querySelector('.reset').addEventListener('click', function () {
+    boardObj.clearBoard();
   });
 };
 

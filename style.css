@@ -1,6 +1,6 @@
-.pieces{
-  margin: 40px;
-}
+/*.pieces{
+  margin: 20px;
+}*/
 .tiles .tile{
   /*border: 1px solid black;*/
   background-color: #e6e6e6;
@@ -78,4 +78,44 @@
   background-repeat: no-repeat;
   background-position: center;
 
+}
+
+.image{
+
+  margin-top: 80px;
+}
+
+
+.board{
+  /*display: inline-block;*/
+}
+
+.header{
+  font-size: 35px;
+  padding-bottom:15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid black;
+}
+
+.credits{
+margin-bottom: 20px;
+}
+
+
+.control-box{
+  position: absolute;
+  left: 95vmin;
+  top: 20vmin;
+  padding: 50px;
+  /*border: 1px solid gray;*/
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.container{
+  display:flex;
+  flex-direction: column;
 }
