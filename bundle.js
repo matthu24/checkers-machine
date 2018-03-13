@@ -131,7 +131,7 @@ window.onload = function () {
     //pass in the tile object and piece object
 
     //update this.board
-    if (!piece.king && (this.isValidMove(piece, tile) || this.isValidJump(piece, tile)) || piece.king && (this.isValidKingMove(piece, tile) || this.isValidKingJump(piece, tile))) {
+    if (!piece.king && (this.isValidMove(piece, tile) || this.isValidJump(piece, tile.position)) || piece.king && (this.isValidKingMove(piece, tile) || this.isValidKingJump(piece, tile.position))) {
       let startX = piece.position[0];
       let startY = piece.position[1];
       let endX = tile.position[0];
@@ -153,6 +153,10 @@ window.onload = function () {
       } else if (!piece.king && this.playerTurn === 2 && piece.position[0] === 0) {
         piece.makeKing();
       }
+
+      if (this.canJumpAny(piece)) {
+        console.log('king can jump again');
+      };
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
       // console.log(this.board)
     }
@@ -165,9 +169,9 @@ window.onload = function () {
     //opponentPosition in the form of [x,y] of the board
     let opponentPosition;
     if (!piece.king) {
-      opponentPosition = this.isValidJump(piece, tile);
+      opponentPosition = this.isValidJump(piece, tile.position);
     } else if (piece.king) {
-      opponentPosition = this.isValidKingJump(piece, tile);
+      opponentPosition = this.isValidKingJump(piece, tile.position);
     }
     console.log(opponentPosition);
     let opponentElement;
@@ -194,9 +198,9 @@ window.onload = function () {
   };
 
   //if false return false if true return the position of piece to be removed
-  Board.prototype.isValidJump = function (piece, tile) {
+  Board.prototype.isValidJump = function (piece, tilePosition) {
     //destination is occupied
-    if (this.board[tile.position[0]][tile.position[1]] !== 0) {
+    if (this.board[tilePosition[0]][tilePosition[1]] !== 0) {
       return false;
     }
 
@@ -205,7 +209,7 @@ window.onload = function () {
     if (this.playerTurn === 1) {
       //get direction of attempted jump (positive or negative):
       //For a jump in pos direction-->
-      if (tile.position[1] - piece.position[1] > 0) {
+      if (tilePosition[1] - piece.position[1] > 0) {
         //nothing is there to jump
         if (this.board[piece.position[0] + 1][piece.position[1] + 1] !== 2) {
           return false;
@@ -221,7 +225,7 @@ window.onload = function () {
         }
       }
       //endX must be one greater than startX: must go forward two spaces
-      if (tile.position[0] - piece.position[0] !== 2) {
+      if (tilePosition[0] - piece.position[0] !== 2) {
         return false;
       } else {
         return opponentPosition;
@@ -229,7 +233,7 @@ window.onload = function () {
     } else {
       //get direction of attempted jump (positive or negative):
       //For a jump in pos direction-->
-      if (tile.position[1] - piece.position[1] > 0) {
+      if (tilePosition[1] - piece.position[1] > 0) {
         //nothing is there to jump
         if (this.board[piece.position[0] - 1][piece.position[1] + 1] !== 1) {
           return false;
@@ -245,7 +249,7 @@ window.onload = function () {
         }
       }
 
-      if (tile.position[0] - piece.position[0] !== -2) {
+      if (tilePosition[0] - piece.position[0] !== -2) {
         return false;
       } else {
         return opponentPosition;
@@ -254,7 +258,7 @@ window.onload = function () {
   };
 
   Board.prototype.isValidMove = function (piece, tile) {
-    // if(Math.abs(tile.position[1]-piece.position[1]) !== 1){
+    // if(Math.abs(tilePosition[1]-piece.position[1]) !== 1){
     //   return false;
     //destination is occupied
     if (this.board[tile.position[0]][tile.position[1]] !== 0) {
@@ -288,9 +292,9 @@ window.onload = function () {
     }
   };
 
-  Board.prototype.isValidKingJump = function (piece, tile) {
+  Board.prototype.isValidKingJump = function (piece, tilePosition) {
     //destination is occupied
-    if (this.board[tile.position[0]][tile.position[1]] !== 0) {
+    if (this.board[tilePosition[0]][tilePosition[1]] !== 0) {
       return false;
     }
 
@@ -298,7 +302,7 @@ window.onload = function () {
     let opponentNumber = this.playerTurn === 1 ? 2 : 1;
 
     //jump to the right & up the board
-    if (tile.position[1] - piece.position[1] > 0 && tile.position[0] - piece.position[0] < 0) {
+    if (tilePosition[1] - piece.position[1] > 0 && tilePosition[0] - piece.position[0] < 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] - 1][piece.position[1] + 1] !== opponentNumber) {
         console.log('failed here');
@@ -307,7 +311,7 @@ window.onload = function () {
         opponentPosition = [piece.position[0] - 1, piece.position[1] + 1];
       }
       //jump to the right and down the board
-    } else if (tile.position[1] - piece.position[1] > 0 && tile.position[0] - piece.position[0] > 0) {
+    } else if (tilePosition[1] - piece.position[1] > 0 && tilePosition[0] - piece.position[0] > 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] + 1][piece.position[1] + 1] !== opponentNumber) {
         console.log('failed here');
@@ -316,7 +320,7 @@ window.onload = function () {
         opponentPosition = [piece.position[0] + 1, piece.position[1] + 1];
       }
       //jump to the left and down the board
-    } else if (tile.position[1] - piece.position[1] < 0 && tile.position[0] - piece.position[0] > 0) {
+    } else if (tilePosition[1] - piece.position[1] < 0 && tilePosition[0] - piece.position[0] > 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] + 1][piece.position[1] - 1] !== opponentNumber) {
         console.log('failed here');
@@ -324,7 +328,7 @@ window.onload = function () {
       } else {
         opponentPosition = [piece.position[0] + 1, piece.position[1] - 1];
       }
-    } else if (tile.position[1] - piece.position[1] < 0 && tile.position[0] - piece.position[0] < 0) {
+    } else if (tilePosition[1] - piece.position[1] < 0 && tilePosition[0] - piece.position[0] < 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] - 1][piece.position[1] - 1] !== opponentNumber) {
         console.log('failed here');
@@ -335,7 +339,7 @@ window.onload = function () {
     }
 
     //endX must be two greater than startX: must go forward two spaces
-    if (Math.abs(tile.position[0] - piece.position[0]) !== 2) {
+    if (Math.abs(tilePosition[0] - piece.position[0]) !== 2) {
       console.log('failed here');
       return false;
     } else {
@@ -352,10 +356,30 @@ window.onload = function () {
 
   Board.prototype.kingJump = function (piece, tile) {
     // console.log('king tried to jump')
-    if (this.isValidKingJump(piece, tile)) {
+    if (this.isValidKingJump(piece, tile.position)) {
       // console.log('king jump valid')
       this.jump(piece, tile);
     }
+  };
+
+  Board.prototype.canJumpAny = function (piece) {
+    //check who's turn it is
+    //check if piece is king or not
+    //grab the possible tiles it's possible to land on after a jump, then call is valid jump
+
+    //need to check all four directions
+    //we need to check if it's in range
+    if (piece.king) {
+      let upperRight = [piece.position[0] - 2, piece.position[1] + 2];
+      let upperLeft = [piece.position[0] - 2, piece.position[1] - 2];
+      let lowerRight = [piece.position[0] + 2, piece.position[1] + 2];
+      let lowerLeft = [piece.position[0] + 2, piece.position[1] - 2];
+      if (this.isValidKingJump(piece, upperRight) || this.isValidKingJump(piece, upperLeft) || this.sValidKingJump(piece, lowerRight) || this.isValidKingJump(piece, lowerLeft)) {
+        return true;
+      }
+    }
+
+    if (this.playerTurn === 1) {} else {}
   };
 
   Board.prototype.clearBoard = function () {
@@ -376,11 +400,11 @@ window.onload = function () {
     }
     if (player1Counter === 0 || player2Counter === 0) {
       if (player1Counter > 0) {
-        console.log('player 1 wins!');
-        document.querySelector('.victory').textContent = 'player 1 wins';
+        // console.log('player 1 wins!')
+        document.querySelector('.victory').textContent = 'Player 1 wins!';
       } else {
-        console.log('player 2 wins!');
-        document.querySelector('.victory').textContent = 'player 2 wins';
+        // console.log('player 2 wins!')
+        document.querySelector('.victory').textContent = 'Player 2 wins!';
       }
       return true;
     } else {
