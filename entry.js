@@ -400,7 +400,6 @@ window.onload = function(){
   }
 
 
-
   let boardObj = new Board();
   boardObj.initialize();
 

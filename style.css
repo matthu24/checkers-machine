@@ -81,8 +81,16 @@
 }
 
 .image{
+  /*position: absolute;*/
+  margin-top: 10vmin;
+  height: 28vmin;
+  width: 28vmin;
 
-  margin-top: 65px;
+}
+
+.castle-image{
+  height: 13vmin;
+  width: 30vmin;
 }
 
 
@@ -91,22 +99,24 @@
 }
 
 .header{
-  font-size: 35px;
+  font-size: 5vmin;
   padding-bottom:15px;
   margin-bottom: 15px;
   border-bottom: 1px solid black;
 }
 
 .credits{
-margin-bottom: 20px;
+  font-size: 2vmin;
+
+margin-bottom: 2vmin;
 }
 
 
 .control-box{
   position: absolute;
-  left: 95vmin;
-  top: 20vmin;
-  padding: 50px;
+  left: 100vmin;
+  top: 14vmin;
+  height: 76vmin;
   margin-left: 20px;
   /*border: 1px solid gray;*/
   display:flex;
@@ -122,25 +132,25 @@ margin-bottom: 20px;
 
 .reset{
   /*font-family: 'Montserrat', sans-serif;*/
-  width: 150px;
-  height: 30px;
+  width: 28vmin;
+  height: 5vmin;
   margin-left: -2px;
   background-color: black;
   border: none;
   color: white;
   font-weight: bold;
-  // padding: 32px;
+  /*// padding: 32px;*/
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 12px;
+  font-size: 2vmin;
   /*border: 1px solid black;*/
 }
 
 .victory{
-  margin-top: 30px;
+  margin-top: 20px;
   font-style: italic;
-  font-size: 30px;
+  font-size: 27px;
 }
 
 .reset:hover{
