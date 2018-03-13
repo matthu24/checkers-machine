@@ -154,11 +154,7 @@ window.onload = function () {
         piece.makeKing();
       }
 
-      if (this.canJumpAny(piece)) {
-        console.log('king can jump again');
-      };
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
-      // console.log(this.board)
     }
   };
 
@@ -173,7 +169,6 @@ window.onload = function () {
     } else if (piece.king) {
       opponentPosition = this.isValidKingJump(piece, tile.position);
     }
-    console.log(opponentPosition);
     let opponentElement;
     if (opponentPosition) {
       this.move(piece, tile);
@@ -190,15 +185,23 @@ window.onload = function () {
           pieces.splice(pieces.indexOf(piece), 1);
         }
       });
-      console.log(opponentElement);
       console.log(this.board);
       opponentElement.element.parentNode.removeChild(opponentElement.element);
     }
+    this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+    if (this.canJumpAny(piece)) {
+      console.log('piece can jump again');
+    };
+    this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+
     this.gameOver();
   };
 
   //if false return false if true return the position of piece to be removed
   Board.prototype.isValidJump = function (piece, tilePosition) {
+    if (!this.inRange(tilePosition)) {
+      return false;
+    }
     //destination is occupied
     if (this.board[tilePosition[0]][tilePosition[1]] !== 0) {
       return false;
@@ -292,7 +295,19 @@ window.onload = function () {
     }
   };
 
+  Board.prototype.inRange = function (position) {
+    if (position[0] > 7 || position[0] < 0) {
+      return false;
+    } else if (position[1] > 7 || position[1] < 0) {
+      return false;
+    }
+    return true;
+  };
+
   Board.prototype.isValidKingJump = function (piece, tilePosition) {
+    if (!this.inRange(tilePosition)) {
+      return false;
+    }
     //destination is occupied
     if (this.board[tilePosition[0]][tilePosition[1]] !== 0) {
       return false;
@@ -305,7 +320,7 @@ window.onload = function () {
     if (tilePosition[1] - piece.position[1] > 0 && tilePosition[0] - piece.position[0] < 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] - 1][piece.position[1] + 1] !== opponentNumber) {
-        console.log('failed here');
+        console.log([piece.position[0] - 1, piece.position[1] + 1]);
         return false;
       } else {
         opponentPosition = [piece.position[0] - 1, piece.position[1] + 1];
@@ -314,7 +329,7 @@ window.onload = function () {
     } else if (tilePosition[1] - piece.position[1] > 0 && tilePosition[0] - piece.position[0] > 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] + 1][piece.position[1] + 1] !== opponentNumber) {
-        console.log('failed here');
+        console.log([piece.position[0] + 1, piece.position[1] + 1]);
         return false;
       } else {
         opponentPosition = [piece.position[0] + 1, piece.position[1] + 1];
@@ -323,7 +338,7 @@ window.onload = function () {
     } else if (tilePosition[1] - piece.position[1] < 0 && tilePosition[0] - piece.position[0] > 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] + 1][piece.position[1] - 1] !== opponentNumber) {
-        console.log('failed here');
+        console.log([piece.position[0] + 1, piece.position[1] - 1]);
         return false;
       } else {
         opponentPosition = [piece.position[0] + 1, piece.position[1] - 1];
@@ -331,7 +346,7 @@ window.onload = function () {
     } else if (tilePosition[1] - piece.position[1] < 0 && tilePosition[0] - piece.position[0] < 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] - 1][piece.position[1] - 1] !== opponentNumber) {
-        console.log('failed here');
+        console.log([piece.position[0] - 1, piece.position[1] - 1]);
         return false;
       } else {
         opponentPosition = [piece.position[0] - 1, piece.position[1] - 1];
@@ -349,15 +364,12 @@ window.onload = function () {
 
   Board.prototype.kingMove = function (piece, tile) {
     if (this.isValidKingMove(piece, tile)) {
-      // console.log(pieces)
       this.move(piece, tile);
     }
   };
 
   Board.prototype.kingJump = function (piece, tile) {
-    // console.log('king tried to jump')
     if (this.isValidKingJump(piece, tile.position)) {
-      // console.log('king jump valid')
       this.jump(piece, tile);
     }
   };
@@ -369,17 +381,31 @@ window.onload = function () {
 
     //need to check all four directions
     //we need to check if it's in range
+    let upperRight = [piece.position[0] - 2, piece.position[1] + 2];
+    let upperLeft = [piece.position[0] - 2, piece.position[1] - 2];
+    let lowerRight = [piece.position[0] + 2, piece.position[1] + 2];
+    let lowerLeft = [piece.position[0] + 2, piece.position[1] - 2];
     if (piece.king) {
-      let upperRight = [piece.position[0] - 2, piece.position[1] + 2];
-      let upperLeft = [piece.position[0] - 2, piece.position[1] - 2];
-      let lowerRight = [piece.position[0] + 2, piece.position[1] + 2];
-      let lowerLeft = [piece.position[0] + 2, piece.position[1] - 2];
-      if (this.isValidKingJump(piece, upperRight) || this.isValidKingJump(piece, upperLeft) || this.sValidKingJump(piece, lowerRight) || this.isValidKingJump(piece, lowerLeft)) {
+      if (this.isValidKingJump(piece, upperRight) || this.isValidKingJump(piece, upperLeft) || this.isValidKingJump(piece, lowerRight) || this.isValidKingJump(piece, lowerLeft)) {
         return true;
+      } else {
+        return false;
       }
     }
 
-    if (this.playerTurn === 1) {} else {}
+    if (this.playerTurn === 1) {
+      if (this.isValidJump(piece, lowerRight) || this.isValidJump(piece, lowerLeft)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      if (this.isValidJump(piece, upperRight) || this.isValidJump(piece, upperLeft)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   };
 
   Board.prototype.clearBoard = function () {
@@ -400,10 +426,8 @@ window.onload = function () {
     }
     if (player1Counter === 0 || player2Counter === 0) {
       if (player1Counter > 0) {
-        // console.log('player 1 wins!')
         document.querySelector('.victory').textContent = 'Player 1 wins!';
       } else {
-        // console.log('player 2 wins!')
         document.querySelector('.victory').textContent = 'Player 2 wins!';
       }
       return true;
@@ -414,7 +438,6 @@ window.onload = function () {
 
   let boardObj = new Board();
   boardObj.initialize();
-  // console.log(pieces)
 
   //events
   // 1. Selection of piece $('.piece').on("click", function () {
@@ -432,12 +455,10 @@ window.onload = function () {
     if (boardObj.playerTurn === 1) {
       if (pieceNumber < 12) {
         e.target.classList.add("selected");
-        // console.log(e.target.id.substr(5,6))
       }
     } else {
       if (pieceNumber >= 12) {
         e.target.classList.add("selected");
-        // console.log(e.target.id.substr(5,6))
       }
     }
   });
