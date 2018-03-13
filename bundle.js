@@ -85,6 +85,7 @@ window.onload = function () {
 
   function Board() {
     this.board = board;
+    this.turnMoveCount = 0;
     this.playerTurn = 2;
     this.viewPorts = ["10vmin", "20vmin", "30vmin", "40vmin", "50vmin", "60vmin", "70vmin", "80vmin", "90vmin", "100vmin"];
   }
@@ -154,6 +155,7 @@ window.onload = function () {
         piece.makeKing();
       }
 
+      this.turnMoveCount = 0;
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     }
   };
@@ -193,8 +195,10 @@ window.onload = function () {
     this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     if (this.canJumpAny(piece)) {
       console.log('piece can jump again');
+      this.turnMoveCount += 1;
       piece.element.classList.add('selected');
     } else {
+      this.turnMoveCount = 0;
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     }
 
@@ -268,6 +272,9 @@ window.onload = function () {
     // if(Math.abs(tilePosition[1]-piece.position[1]) !== 1){
     //   return false;
     //destination is occupied
+    if (this.turnMoveCount > 0) {
+      return false;
+    }
     if (this.board[tile.position[0]][tile.position[1]] !== 0) {
       return false;
     }
@@ -288,6 +295,9 @@ window.onload = function () {
   };
 
   Board.prototype.isValidKingMove = function (piece, tile) {
+    if (this.turnMoveCount > 0) {
+      return false;
+    }
     if (this.board[tile.position[0]][tile.position[1]] !== 0) {
       return false;
     }
@@ -451,18 +461,21 @@ window.onload = function () {
 
   document.querySelector('.pieces').addEventListener("click", function (e) {
     // need to get rid of selected class on all piece elements
-    document.querySelectorAll('.piece').forEach(node => {
-      node.classList.remove("selected");
-    });
+    if (boardObj.turnMoveCount === 0) {
 
-    let pieceNumber = e.target.id.substr(5, 6);
-    if (boardObj.playerTurn === 1) {
-      if (pieceNumber < 12) {
-        e.target.classList.add("selected");
-      }
-    } else {
-      if (pieceNumber >= 12) {
-        e.target.classList.add("selected");
+      document.querySelectorAll('.piece').forEach(node => {
+        node.classList.remove("selected");
+      });
+
+      let pieceNumber = e.target.id.substr(5, 6);
+      if (boardObj.playerTurn === 1) {
+        if (pieceNumber < 12) {
+          e.target.classList.add("selected");
+        }
+      } else {
+        if (pieceNumber >= 12) {
+          e.target.classList.add("selected");
+        }
       }
     }
   });
