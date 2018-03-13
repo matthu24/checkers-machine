@@ -188,11 +188,15 @@ window.onload = function () {
       console.log(this.board);
       opponentElement.element.parentNode.removeChild(opponentElement.element);
     }
+
+    //need to turn player turn back to check can jump any because we turned it automatically in board.move
     this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     if (this.canJumpAny(piece)) {
       console.log('piece can jump again');
-    };
-    this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+      piece.element.classList.add('selected');
+    } else {
+      this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+    }
 
     this.gameOver();
   };
