@@ -130,7 +130,6 @@ window.onload = function () {
   boardObj.initialize();
 
   let computer = new __WEBPACK_IMPORTED_MODULE_2__computer_player__["a" /* default */](pieces, board, tiles, boardObj);
-  console.log(computer.findRandomPiece());
 
   //update this.board
   //update html piece node style: change the position
@@ -167,6 +166,11 @@ window.onload = function () {
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     }
     console.log(pieces);
+    if (this.playerTurn === 1) {
+      let randomPiece = computer.findRandomPiece();
+      console.log(randomPiece);
+      console.log(computer.canRandomPieceMove(randomPiece));
+    }
   };
 
   //1. remove from this.board
@@ -290,12 +294,14 @@ window.onload = function () {
     if (this.playerTurn === 1) {
       //endX must be one greater than startX
       if (tilePosition[0] - piece.position[0] !== 1) {
+
         return false;
       } else {
         return true;
       }
     } else {
       if (tilePosition[0] - piece.position[0] !== -1) {
+
         return false;
       } else {
         return true;
@@ -601,8 +607,14 @@ computerPlayer.prototype.canRandomPieceMove = function (piece) {
     //can only travel down: +1 on the row
     let tilePos1 = [piece.position[0] + 1, piece.position[1] + 1];
     let tilePos2 = [piece.position[0] + 1, piece.position[1] - 1];
+    let pos = [tilePos1, tilePos2];
+    //0 or 1
+    for (let i = 0; i < pos.length; i++) {
+      if (this.boardObj.isValidMove(piece, pos[i])) {
+        result = true;
+      }
+    }
   }
-  console.log(result);
   return result;
 };
 

@@ -65,7 +65,6 @@ window.onload = function(){
   boardObj.initialize();
 
   let computer = new Computer(pieces,board,tiles,boardObj);
-  console.log(computer.findRandomPiece());
 
   //update this.board
   //update html piece node style: change the position
@@ -104,6 +103,13 @@ window.onload = function(){
       this.playerTurn = this.playerTurn === 1? 2 : 1;
     }
     console.log(pieces)
+    if(this.playerTurn === 1){
+      let randomPiece = computer.findRandomPiece()
+      console.log(randomPiece);
+      console.log(computer.canRandomPieceMove(randomPiece))
+    }
+
+
   }
 
 
@@ -231,12 +237,14 @@ window.onload = function(){
     if(this.playerTurn === 1){
       //endX must be one greater than startX
       if(tilePosition[0]-piece.position[0] !== 1){
+
         return false;
       }else{
         return true;
       }
     }else{
       if(tilePosition[0]-piece.position[0] !== -1){
+
         return false;
       }else{
         return true;

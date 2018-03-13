@@ -33,9 +33,14 @@ computerPlayer.prototype.canRandomPieceMove = function(piece){
     //can only travel down: +1 on the row
     let tilePos1 = [piece.position[0] + 1, piece.position[1] + 1];
     let tilePos2 = [piece.position[0] + 1, piece.position[1] - 1];
-    
+    let pos = [tilePos1,tilePos2]
+    //0 or 1
+    for(let i=0;i< pos.length;i++){
+      if(this.boardObj.isValidMove(piece,pos[i])){
+        result = true;
+      }
+    }
   }
-  console.log(result)
   return result;
 }
 
