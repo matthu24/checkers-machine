@@ -1,4 +1,5 @@
-function Piece(element, position){
+function Piece(id,element, position){
+  this.id = id;
   this.element = element;
   this.position = position;
   this.king = false;
@@ -13,7 +14,7 @@ Piece.prototype.move = function(tile,newStylePos){
 
 Piece.prototype.makeKing = function(){
   this.king = true;
-  this.element.classList.add('king') 
+  this.element.classList.add('king')
 }
 
 export default Piece;

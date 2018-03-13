@@ -1,5 +1,6 @@
 import Piece from './piece';
 import Tile from './tile';
+import Computer from './computer-player';
 
 window.onload = function(){
 
@@ -52,7 +53,7 @@ window.onload = function(){
           newPiece = newPiece.replace('%id%',pieceCount)
           // newPiece = newPiece.replace('%piece%',this.board[row][col]);
           document.querySelector('.player' + this.board[row][col] + 'pieces').insertAdjacentHTML('beforeend',newPiece);
-          let pieceObject = new Piece(document.querySelector('#piece'+String(pieceCount)),[parseInt(row),parseInt(col)]);
+          let pieceObject = new Piece(pieceCount,document.querySelector('#piece'+String(pieceCount)),[parseInt(row),parseInt(col)]);
           pieces.push(pieceObject);
           pieceCount+=1;
         }
@@ -68,8 +69,8 @@ window.onload = function(){
     //pass in the tile object and piece object
 
     //update this.board
-    if((!piece.king && (this.isValidMove(piece,tile) || this.isValidJump(piece,tile.position))) ||
-     piece.king && (this.isValidKingMove(piece,tile) || this.isValidKingJump(piece,tile.position))){
+    if((!piece.king && (this.isValidMove(piece,tile.position) || this.isValidJump(piece,tile.position))) ||
+     piece.king && (this.isValidKingMove(piece,tile.position) || this.isValidKingJump(piece,tile.position))){
       let startX = piece.position[0];
       let startY = piece.position[1];
       let endX = tile.position[0];
@@ -96,6 +97,7 @@ window.onload = function(){
       this.turnMoveCount = 0;
       this.playerTurn = this.playerTurn === 1? 2 : 1;
     }
+    console.log(pieces)
   }
 
 
@@ -210,25 +212,25 @@ window.onload = function(){
     }
   }
 
-  Board.prototype.isValidMove = function(piece,tile){
+  Board.prototype.isValidMove = function(piece,tilePosition){
     // if(Math.abs(tilePosition[1]-piece.position[1]) !== 1){
     //   return false;
     //destination is occupied
     if(this.turnMoveCount > 0){
       return false
     }
-    if(this.board[tile.position[0]][tile.position[1]] !== 0){
+    if(this.board[tilePosition[0]][tilePosition[1]] !== 0){
       return false;
     }
     if(this.playerTurn === 1){
       //endX must be one greater than startX
-      if(tile.position[0]-piece.position[0] !== 1){
+      if(tilePosition[0]-piece.position[0] !== 1){
         return false;
       }else{
         return true;
       }
     }else{
-      if(tile.position[0]-piece.position[0] !== -1){
+      if(tilePosition[0]-piece.position[0] !== -1){
         return false;
       }else{
         return true;
@@ -236,15 +238,15 @@ window.onload = function(){
     }
   }
 
-  Board.prototype.isValidKingMove = function(piece,tile){
+  Board.prototype.isValidKingMove = function(piece,tilePosition){
     if(this.turnMoveCount > 0){
       return false
     }
-    if(this.board[tile.position[0]][tile.position[1]] !== 0){
+    if(this.board[tilePosition[0]][tilePosition[1]] !== 0){
       return false;
     }
     //endX must be one greater or one less than startX
-    if(tile.position[0]-piece.position[0] !== 1 && tile.position[0]-piece.position[0] !== -1){
+    if(tilePosition[0]-piece.position[0] !== 1 && tilePosition[0]-piece.position[0] !== -1){
       return false;
     }else{
       return true;
@@ -319,7 +321,7 @@ window.onload = function(){
   }
 
   Board.prototype.kingMove = function(piece,tile){
-    if(this.isValidKingMove(piece,tile)){
+    if(this.isValidKingMove(piece,tile.position)){
       this.move(piece,tile);
     }
   }
@@ -402,6 +404,9 @@ window.onload = function(){
 
   let boardObj = new Board();
   boardObj.initialize();
+
+  let computer = new Computer(pieces,board,tiles,boardObj);
+  console.log(computer.findRandomPiece());
 
   //events
   // 1. Selection of piece $('.piece').on("click", function () {
