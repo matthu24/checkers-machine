@@ -21,7 +21,7 @@ window.onload = function(){
 
   function Board (){
     this.board = board;
-    this.playerTurn = 1;
+    this.playerTurn = 2;
     this.viewPorts = ["10vmin", "20vmin", "30vmin", "40vmin", "50vmin", "60vmin", "70vmin", "80vmin", "90vmin", "100vmin"]
   }
 
@@ -397,6 +397,7 @@ window.onload = function(){
       }
     }
   });
+  
   document.querySelector('.reset').addEventListener('click',function(){
     boardObj.clearBoard();
   });
