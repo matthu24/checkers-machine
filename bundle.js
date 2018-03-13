@@ -126,6 +126,12 @@ window.onload = function () {
     }
   };
 
+  let boardObj = new Board();
+  boardObj.initialize();
+
+  let computer = new __WEBPACK_IMPORTED_MODULE_2__computer_player__["a" /* default */](pieces, board, tiles, boardObj);
+  console.log(computer.findRandomPiece());
+
   //update this.board
   //update html piece node style: change the position
   //call piece.move to update the piece object
@@ -453,12 +459,6 @@ window.onload = function () {
     }
   };
 
-  let boardObj = new Board();
-  boardObj.initialize();
-
-  let computer = new __WEBPACK_IMPORTED_MODULE_2__computer_player__["a" /* default */](pieces, board, tiles, boardObj);
-  console.log(computer.findRandomPiece());
-
   //events
   // 1. Selection of piece $('.piece').on("click", function () {
   //   1. Check if the piece belongs to the player who’s turn it is
@@ -596,10 +596,14 @@ computerPlayer.prototype.findRandomPiece = function () {
 };
 
 computerPlayer.prototype.canRandomPieceMove = function (piece) {
+  let result = false;
   if (!piece.king) {
     //can only travel down: +1 on the row
-
+    let tilePos1 = [piece.position[0] + 1, piece.position[1] + 1];
+    let tilePos2 = [piece.position[0] + 1, piece.position[1] - 1];
   }
+  console.log(result);
+  return result;
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (computerPlayer);

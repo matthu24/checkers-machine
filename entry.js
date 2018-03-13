@@ -61,6 +61,12 @@ window.onload = function(){
     }
   }
 
+  let boardObj = new Board();
+  boardObj.initialize();
+
+  let computer = new Computer(pieces,board,tiles,boardObj);
+  console.log(computer.findRandomPiece());
+
   //update this.board
   //update html piece node style: change the position
   //call piece.move to update the piece object
@@ -402,11 +408,7 @@ window.onload = function(){
   }
 
 
-  let boardObj = new Board();
-  boardObj.initialize();
 
-  let computer = new Computer(pieces,board,tiles,boardObj);
-  console.log(computer.findRandomPiece());
 
   //events
   // 1. Selection of piece $('.piece').on("click", function () {

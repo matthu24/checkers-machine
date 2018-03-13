@@ -28,10 +28,15 @@ computerPlayer.prototype.findRandomPiece = function(){
 }
 
 computerPlayer.prototype.canRandomPieceMove = function(piece){
+  let result = false;
   if(!piece.king){
     //can only travel down: +1 on the row
+    let tilePos1 = [piece.position[0] + 1, piece.position[1] + 1];
+    let tilePos2 = [piece.position[0] + 1, piece.position[1] - 1];
     
   }
+  console.log(result)
+  return result;
 }
 
 export default computerPlayer;
