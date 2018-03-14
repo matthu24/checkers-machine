@@ -7,9 +7,27 @@ function computerPlayer(pieces,board,tiles,boardObj){
   this.boardObj = boardObj;
 }
 
-//returns [piece,tile]
+//find a random piece that
+//returns [piece,tile position]
 computerPlayer.prototype.move = function(){
+  let randomPiece;
+  let position;
+  let foundMove = false;
+  while(!foundMove){
+    randomPiece = this.findRandomPiece();
+    position = this.canRandomPieceMove(randomPiece);
+    if(position){
+      this.tiles.forEach(tile => {
+        if(tile.position[0] === position[0] && tile.position[1] === position[1]){
+          foundMove = [randomPiece,tile]
+        }
+      })
 
+    }
+  }
+
+
+  return foundMove;
 }
 
 //returns the random piece
@@ -37,7 +55,7 @@ computerPlayer.prototype.canRandomPieceMove = function(piece){
     //0 or 1
     for(let i=0;i< pos.length;i++){
       if(this.boardObj.isValidMove(piece,pos[i])){
-        result = true;
+        result = pos[i];
       }
     }
   }

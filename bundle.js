@@ -71,10 +71,9 @@
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__piece__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tile__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__computer_player__ = __webpack_require__(3);
 
 
-
+// import Computer from './computer-player';
 
 window.onload = function () {
 
@@ -128,14 +127,13 @@ window.onload = function () {
 
   let boardObj = new Board();
   boardObj.initialize();
-
-  let computer = new __WEBPACK_IMPORTED_MODULE_2__computer_player__["a" /* default */](pieces, board, tiles, boardObj);
+  // let computer = new Computer(pieces,board,tiles,boardObj);
 
   //update this.board
   //update html piece node style: change the position
   //call piece.move to update the piece object
   //change this.playerTurn
-  Board.prototype.move = function (piece, tile) {
+  Board.prototype.move = function (piece, tile, jump) {
     //pass in the tile object and piece object
 
     //update this.board
@@ -163,15 +161,25 @@ window.onload = function () {
       }
 
       this.turnMoveCount = 0;
-      this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+      if (!jump) {
+        this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+      }
     }
-    console.log(pieces);
-    if (this.playerTurn === 1) {
-      let randomPiece = computer.findRandomPiece();
-      console.log(randomPiece);
-      console.log(computer.canRandomPieceMove(randomPiece));
-    }
+    // this.getComputerMove();
   };
+
+  // Board.prototype.getComputerMove = function(){
+  //   if(this.playerTurn === 1){
+  //     let that = this;
+  //     setTimeout(function(){
+  //       console.log(computer.pieces)
+  //       let randomMove = computer.move()
+  //       that.move(randomMove[0],randomMove[1])
+  //       console.log(randomMove)
+  //     },2000)
+  //
+  //   }
+  // }
 
   //1. remove from this.board
   //2. remove html node
@@ -186,7 +194,7 @@ window.onload = function () {
     }
     let opponentElement;
     if (opponentPosition) {
-      this.move(piece, tile);
+      this.move(piece, tile, true);
       //remove opponent from board
       //1. remove from this.board, turn posiiton to zero
       this.board[opponentPosition[0]][opponentPosition[1]] = 0;
@@ -205,7 +213,7 @@ window.onload = function () {
     }
 
     //need to turn player turn back to check can jump any because we turned it automatically in board.move
-    this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+    // this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     if (this.canJumpAny(piece)) {
       console.log('piece can jump again');
       this.turnMoveCount += 1;
@@ -214,6 +222,8 @@ window.onload = function () {
       this.turnMoveCount = 0;
       this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     }
+    // this.getComputerMove();
+
 
     this.gameOver();
   };
@@ -349,7 +359,6 @@ window.onload = function () {
     if (tilePosition[1] - piece.position[1] > 0 && tilePosition[0] - piece.position[0] < 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] - 1][piece.position[1] + 1] !== opponentNumber) {
-        console.log([piece.position[0] - 1, piece.position[1] + 1]);
         return false;
       } else {
         opponentPosition = [piece.position[0] - 1, piece.position[1] + 1];
@@ -358,7 +367,6 @@ window.onload = function () {
     } else if (tilePosition[1] - piece.position[1] > 0 && tilePosition[0] - piece.position[0] > 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] + 1][piece.position[1] + 1] !== opponentNumber) {
-        console.log([piece.position[0] + 1, piece.position[1] + 1]);
         return false;
       } else {
         opponentPosition = [piece.position[0] + 1, piece.position[1] + 1];
@@ -367,7 +375,6 @@ window.onload = function () {
     } else if (tilePosition[1] - piece.position[1] < 0 && tilePosition[0] - piece.position[0] > 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] + 1][piece.position[1] - 1] !== opponentNumber) {
-        console.log([piece.position[0] + 1, piece.position[1] - 1]);
         return false;
       } else {
         opponentPosition = [piece.position[0] + 1, piece.position[1] - 1];
@@ -375,7 +382,6 @@ window.onload = function () {
     } else if (tilePosition[1] - piece.position[1] < 0 && tilePosition[0] - piece.position[0] < 0) {
       //nothing is there to jump
       if (this.board[piece.position[0] - 1][piece.position[1] - 1] !== opponentNumber) {
-        console.log([piece.position[0] - 1, piece.position[1] - 1]);
         return false;
       } else {
         opponentPosition = [piece.position[0] - 1, piece.position[1] - 1];
@@ -384,7 +390,6 @@ window.onload = function () {
 
     //endX must be two greater than startX: must go forward two spaces
     if (Math.abs(tilePosition[0] - piece.position[0]) !== 2) {
-      console.log('failed here');
       return false;
     } else {
       return opponentPosition;
@@ -407,7 +412,6 @@ window.onload = function () {
     //check who's turn it is
     //check if piece is king or not
     //grab the possible tiles it's possible to land on after a jump, then call is valid jump
-
     //need to check all four directions
     //we need to check if it's in range
     let upperRight = [piece.position[0] - 2, piece.position[1] + 2];
@@ -568,57 +572,6 @@ function Tile(element, position) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Tile);
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-//pass in board/pieces or smth
-function computerPlayer(pieces, board, tiles, boardObj) {
-  this.pieces = pieces;
-  this.board = board;
-  this.tiles = tiles;
-  //so it has access to boardObj methods;
-  this.boardObj = boardObj;
-}
-
-//returns [piece,tile]
-computerPlayer.prototype.move = function () {};
-
-//returns the random piece
-computerPlayer.prototype.findRandomPiece = function () {
-  let numberOfPieces = this.pieces.length;
-  let randomPiece;
-  // let id = 12;
-  while (!randomPiece) {
-    //random number between 0 and number of pieces-1 inclusive
-    let index = Math.floor(Math.random() * numberOfPieces);
-    if (this.pieces[index].id < 12) {
-      randomPiece = this.pieces[index];
-    }
-  }
-  return randomPiece;
-};
-
-computerPlayer.prototype.canRandomPieceMove = function (piece) {
-  let result = false;
-  if (!piece.king) {
-    //can only travel down: +1 on the row
-    let tilePos1 = [piece.position[0] + 1, piece.position[1] + 1];
-    let tilePos2 = [piece.position[0] + 1, piece.position[1] - 1];
-    let pos = [tilePos1, tilePos2];
-    //0 or 1
-    for (let i = 0; i < pos.length; i++) {
-      if (this.boardObj.isValidMove(piece, pos[i])) {
-        result = true;
-      }
-    }
-  }
-  return result;
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (computerPlayer);
 
 /***/ })
 /******/ ]);
